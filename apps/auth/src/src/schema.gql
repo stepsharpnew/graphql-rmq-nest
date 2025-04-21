@@ -1,0 +1,47 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Mutation {
+  login(dto: UserLoginInput!): UserResponse!
+  refresh: UserResponse!
+  registration(dto: UserRegisterInput!): UserResponse!
+}
+
+type Query {
+  getMe: User!
+  getUsers: [User!]!
+}
+
+type Subscription {
+  newUserCreated: UserResponse!
+}
+
+type User {
+  _id: ID!
+  age: Float
+  description: String
+  email: String!
+  password: String!
+  refresh: String!
+}
+
+input UserLoginInput {
+  email: String!
+  password: String!
+}
+
+input UserRegisterInput {
+  age: Int
+  description: String
+  email: String!
+  password: String!
+}
+
+type UserResponse {
+  accessToken: String!
+  age: Int
+  email: String!
+  id: String!
+  refreshToken: String!
+}
