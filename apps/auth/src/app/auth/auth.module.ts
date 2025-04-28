@@ -3,11 +3,11 @@ import { AuthService } from './auth.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from '../user/user.schema';
 import { JwtModule } from '@nestjs/jwt';
-import 'dotenv/config'
 import { getRMQConfig } from '../config/rmq-congig';
 import { RMQModule } from 'nestjs-rmq';
 import { ConfigService } from '@nestjs/config';
 import { UserSubService } from '../sub/user.sub.service';
+import { EnvEnum } from '@my-workspace/my-nest-lib';
 
 @Module({
   imports : [ 
@@ -16,7 +16,7 @@ import { UserSubService } from '../sub/user.sub.service';
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => ({
         global: true,
-        secret: configService.get<string>('JWT_ACCESS_SECRET'),
+        secret: configService.get<string>(EnvEnum.JWT_ACCESS_SECRET),
         signOptions: { expiresIn: '15m' },
       }),
       inject: [ConfigService],
