@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@my-workspace/my-nest-lib": ["libs/my-nest-lib/src/index.ts"]
+      "@my-workspace/my-nest-lib": ["libs/my-nest-lib/src/index.ts"],
+      "@my-workspace/rmq-client": ["libs/rmq-client/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

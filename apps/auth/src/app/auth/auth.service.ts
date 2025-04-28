@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { UserLoginInput, UserRegisterInput, UserResponse } from '../user/dto/user.dto';
@@ -6,10 +6,12 @@ import { User } from '../user/user.schema';
 import * as bcrypt from 'bcryptjs'
 import { JwtService } from '@nestjs/jwt';
 import 'dotenv/config'
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class AuthService {
 	constructor(
+		@Inject('NOTIFICATIONS_CLIENT') private readonly notificationsClient: ClientProxy,
 		@InjectModel(User.name) private userModel : Model<User>,
 		private jwtService: JwtService
 	){}
@@ -39,6 +41,7 @@ export class AuthService {
 		const tokens = await this.createToken(dto.email, userConsist._id as string)
 		userConsist.refresh = tokens.refreshToken; 
 		await this.updateRefreshToken(userConsist._id, tokens.refreshToken)
+		await this.notificationsClient.emit('user.created', {email : dto.email})
 		return tokens
 	}
 

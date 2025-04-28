@@ -2,7 +2,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
-import { join } from 'path';
+import  path  from 'path';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 const pubSub = new PubSub();
 @Module({
@@ -10,7 +10,7 @@ const pubSub = new PubSub();
 		GraphQLModule.forRoot<ApolloDriverConfig>({
 			driver: ApolloDriver,
 			csrfPrevention: false,
-			autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+			autoSchemaFile: path.join(__dirname, '../schema.gql'),
 			sortSchema: true,
 			playground : false,
 			context: ({ req, res }) => {

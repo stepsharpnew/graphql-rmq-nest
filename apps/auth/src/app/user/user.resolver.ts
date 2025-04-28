@@ -59,7 +59,7 @@ export class UserResolver {
       secure: false,
       sameSite : 'lax'
     });
-    return this.userService.login(dto)
+    return userResponse
   }
 
   @Mutation(()=>UserResponse)

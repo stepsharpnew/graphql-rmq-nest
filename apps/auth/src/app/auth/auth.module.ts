@@ -4,9 +4,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from '../user/user.schema';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import 'dotenv/config'
+import { RmqClientModule } from '@my-workspace/rmq-client';
 
 @Module({
   imports : [
+    // RmqClientModule.forRoot('notifications_queue', 'NOTIFICATIONS_CLIENT'),
     MongooseModule.forFeature([{name : User.name, schema : UserSchema}]),
     JwtModule.register({
       global: true,
