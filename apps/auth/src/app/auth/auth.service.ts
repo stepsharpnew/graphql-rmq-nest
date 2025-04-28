@@ -6,14 +6,17 @@ import { User } from '../user/user.schema';
 import * as bcrypt from 'bcryptjs'
 import { JwtService } from '@nestjs/jwt';
 import 'dotenv/config'
-import { ClientProxy } from '@nestjs/microservices';
+import { RMQService } from 'nestjs-rmq';
+import { AuthLogin, TopicsEnum } from '@my-workspace/my-nest-lib'
+import { UserSubService } from '../sub/user.sub.service';
 
 @Injectable()
 export class AuthService {
 	constructor(
-		@Inject('NOTIFICATIONS_CLIENT') private readonly notificationsClient: ClientProxy,
 		@InjectModel(User.name) private userModel : Model<User>,
-		private jwtService: JwtService
+		private jwtService: JwtService,
+		private readonly rmqService: RMQService,
+		private userSubService:UserSubService
 	){}
 	async registration(dto : UserRegisterInput):Promise<UserResponse>{
 		const userConsist = await this.userModel.findOne({email : dto.email})
@@ -25,6 +28,13 @@ export class AuthService {
 		const tokens = await this.createToken(dto.email, newUser._id as string)
 		newUser.refresh = tokens.refreshToken; 
 		await this.updateRefreshToken(newUser._id, tokens.refreshToken)
+		const response = await this.rmqService.send<AuthLogin.Request, AuthLogin.Response>(
+			TopicsEnum.AuthRegister,
+			{ email: dto.email }
+		  );
+		await this.userSubService.publish('newUserCreated',response.email)
+		console.log(tokens);
+		
 		return tokens
 	}
 
@@ -41,7 +51,7 @@ export class AuthService {
 		const tokens = await this.createToken(dto.email, userConsist._id as string)
 		userConsist.refresh = tokens.refreshToken; 
 		await this.updateRefreshToken(userConsist._id, tokens.refreshToken)
-		await this.notificationsClient.emit('user.created', {email : dto.email})
+		// console.log(dto.email);
 		return tokens
 	}
 

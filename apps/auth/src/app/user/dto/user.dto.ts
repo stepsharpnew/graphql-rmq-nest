@@ -2,10 +2,10 @@ import { Field, InputType, Int, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()
 export class UserResponse{
-	@Field()
+	@Field(()=>String, {nullable : true})
 	id ?: string 
 
-	@Field()
+	@Field(()=>String, {nullable : true})
 	email ?: string
 
 	@Field(()=>Int, {nullable : true})
@@ -16,6 +16,9 @@ export class UserResponse{
 
 	@Field(()=>String)
 	refreshToken ?: string
+
+	@Field(()=>String)
+	rmq_data ?: string
 }
 
 

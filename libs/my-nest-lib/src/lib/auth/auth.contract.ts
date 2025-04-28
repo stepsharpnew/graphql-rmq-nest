@@ -1,13 +1,13 @@
-// export namespace AuthLogin{
-
-// 	export class Request{
-// 		email : string;
-// 		password : string;
-// 		description? : string
-// 		age? : number
-// 	}
-
-// 	export class Response {
-
-// 	}
-// }
+import { IsEmail, IsString, IsOptional, Min, Max } from 'class-validator';
+export namespace AuthLogin {
+	export class Request {
+		
+	  @IsEmail()
+	  email!: string;
+	}
+  
+	export class Response {
+		email!: string;
+		text!:string
+	}
+  }

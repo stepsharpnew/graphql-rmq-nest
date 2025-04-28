@@ -1,14 +1,20 @@
 import { Module } from '@nestjs/common';
-// import { AppResolver } from './app.resolver';
-import { AppService } from './app.service';
-// import { GraphqlModule } from './graphql/graphql.module';
-import { RmqServerModule } from '../rmq/rmq.module';
-import { AppResolver } from './app.resolver';
+import { AppService } from './app.service';;
 import { AppController } from './app.controller';
+import { getRMQConfig } from '../config/rmq-congig';
+import { RMQModule } from 'nestjs-rmq';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [RmqServerModule],
+ 
+  imports: [
+    RMQModule.forRootAsync(getRMQConfig()),
+    ConfigModule.forRoot({
+      isGlobal: true, 
+      envFilePath: '.env',
+    }),
+  ],
   controllers  : [AppController],
-  providers: [AppService,AppResolver],
+  providers: [AppService],
 })
 export class AppModule {}

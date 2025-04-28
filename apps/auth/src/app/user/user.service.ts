@@ -5,18 +5,22 @@ import { Model } from 'mongoose';
 import { UserLoginInput, UserRegisterInput, UserResponse } from './dto/user.dto';
 import { AuthService } from '../auth/auth.service';
 import { Context } from '@nestjs/graphql';
+import { UserSubService } from '../sub/user.sub.service';
 
 @Injectable()
 export class UserService {
 	constructor(
 		@InjectModel(User.name) private userModel : Model<User>,
-		private readonly authService : AuthService
+		private readonly authService : AuthService,
+		private readonly userSubService : UserSubService
 	){}
 
 	async registration(dto : UserRegisterInput):Promise<UserResponse>{
 		const tokens = await this.authService.registration(dto)
 		const { password, ...rest } = dto;
-		return {...tokens, ...rest}
+    	const rmq_data = await this.userSubService.publish('newUserCreated',{ password, ...rest })
+		return {...tokens, ...rest, rmq_data}
+		
 	}
 
 	async login(dto : UserLoginInput):Promise<UserResponse>{

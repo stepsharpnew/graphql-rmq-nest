@@ -8,6 +8,7 @@ export class RmqClientModule {
   static forRoot(queue: string, token = 'NOTIFICATIONS_CLIENT'): DynamicModule {
     return {
       module: RmqClientModule,
+      
       providers: [
         {
           provide: token,

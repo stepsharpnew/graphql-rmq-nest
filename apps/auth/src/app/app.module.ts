@@ -4,14 +4,24 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { UserSubService } from './sub/user.sub.service';
-import { RmqClientModule } from '@my-workspace/rmq-client'
 import 'dotenv/config'
+import { ConfigModule, ConfigService } from '@nestjs/config';
+
 
 
 @Module({
   imports: [
-    RmqClientModule.forRoot('notifications_queue', 'NOTIFICATIONS_CLIENT'),
-    MongooseModule.forRoot(`${process.env.MONGO_URI}`),
+    ConfigModule.forRoot({
+      isGlobal: true, 
+      envFilePath: '.env',
+    }),
+    MongooseModule.forRootAsync({
+      imports : [ConfigModule],
+      inject : [ConfigService],
+      useFactory: async (configService : ConfigService)=>({
+        uri : configService.get('MONGO_URI')
+      })
+    }),
     GraphqlModule,
     UserModule,
     AuthModule

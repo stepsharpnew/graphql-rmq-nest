@@ -39,13 +39,13 @@ export class UserResolver {
     @Context() context: { res: Response }
   ) {
     const userResponse = await this.userService.registration(dto);
-    this.userSubService.publish('newUserCreated',userResponse)
     context.res.cookie('refreshToken', userResponse.refreshToken, {
       httpOnly: true,
       secure: false,
       sameSite : 'lax'
     });
-    return userResponse;
+    // console.log(userResponse);
+    return {...userResponse};
   }
 
   @Mutation(()=>UserResponse)
@@ -59,6 +59,7 @@ export class UserResolver {
       secure: false,
       sameSite : 'lax'
     });
+    // console.log(userResponse);
     return userResponse
   }
 
