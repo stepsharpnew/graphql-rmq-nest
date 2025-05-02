@@ -40,7 +40,8 @@
       "exclude": [
         "apps/my-workspace-e2e/**/*",
         "apps/auth-e2e/**/*",
-        "apps/notifications-e2e/**/*"
+        "apps/notifications-e2e/**/*",
+        "apps/payments-e2e/**/*"
       ]
     }
   ]

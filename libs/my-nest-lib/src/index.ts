@@ -1,3 +1,5 @@
 export * from './lib/auth/auth.contract'
 export * from './lib/enums/topicsEnums'
 export * from './lib/enums/EnvEnums'
+export * from './lib/payments/payment.create.contract'
+export * from './lib/auth/interfaces/payment.create.res.interface'

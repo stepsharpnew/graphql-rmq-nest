@@ -8,6 +8,8 @@ import {
 } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import {
+  PaymentInputDTO,
+  PaymentResponse,
   UserLoginInput,
   UserRegisterInput,
   UserResponse,
@@ -68,6 +70,14 @@ export class UserResolver {
       sameSite: 'lax',
     });
     return userResponse;
+  }
+
+  @Mutation(() => PaymentResponse)
+  async payment(@Args('dto') dto: PaymentInputDTO) {
+    const paymentResponse = await this.userService.payment(dto);
+    console.log(paymentResponse);
+    
+    return paymentResponse;
   }
 
   @Mutation(() => UserResponse)
